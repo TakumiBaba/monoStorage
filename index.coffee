@@ -7,9 +7,11 @@ global._ = require 'underscore'
 http     = require 'http'
 express  = require 'express'
 app      = express()
+server   = http.createServer(app)
+io       = require('socket.io').listen server
 
 (require './config/config') app
-(require './config/routes') app
+(require './config/routes') app, io
 
-http.createServer(app).listen app.get('port'), ->
+server.listen app.get('port'), ->
   console.log "City listening on port #{app.get 'port'} in #{process.env.NODE_ENV} mode.".green
